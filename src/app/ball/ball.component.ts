@@ -14,19 +14,22 @@ export class BallComponent implements OnInit, OnChanges {
 
   @ViewChild('el', {static: true}) el: ElementRef;
 
-  private ball: any = this.builder.build([
-    style({right: '0px'}),
-    style({top: '0px'}),
-    animate(2000, style({right: 'calc(100% - 50px)'})),
-    animate(2000, style({top: 'calc(100% - 50px)'})),
-    animate(2000, style({right: '0px'})),
-    animate(2000, style({top: '0px'})),
-  ]);
+  private ballWidth: number;
+  private ball: any;
   private player: any;
 
   constructor(private builder: AnimationBuilder) { }
 
   ngOnInit() {
+    this.ballWidth = this.el.nativeElement.offsetWidth;
+    this.ball = this.builder.build([
+      style({right: '0px'}),
+      style({top: '0px'}),
+      animate(2000, style({right: 'calc(100% - ' + this.ballWidth + 'px)'})),
+      animate(2000, style({top: 'calc(100% - ' + this.ballWidth + 'px)'})),
+      animate(2000, style({right: '0px'})),
+      animate(2000, style({top: '0px'})),
+    ]);
     this.player = this.ball.create(this.el.nativeElement, {});
   }
 
