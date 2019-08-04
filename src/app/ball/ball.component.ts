@@ -1,16 +1,26 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { style, animate, AnimationBuilder } from '@angular/animations';
 
+interface State {
+  isStart: boolean;
+  isStop: boolean;
+  isPause: boolean;
+  isPlay: boolean;
+}
+
 @Component({
   selector: 'app-ball',
   templateUrl: './ball.component.html',
   styleUrls: ['./ball.component.css']
 })
 export class BallComponent implements OnInit, OnChanges {
-  @Input() isStart: boolean;
-  @Input() isStop: boolean;
-  @Input() isPause: boolean;
-  @Input() isPlay: boolean;
+
+  @Input() state: State = {
+    isStart: false,
+    isStop: false,
+    isPause: false,
+    isPlay: false
+  };
 
   @ViewChild('el', {static: true}) el: ElementRef;
 
@@ -34,32 +44,26 @@ export class BallComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    for(const propName in changes) {
-      const change = changes[propName];
-      switch (propName) {
-        case 'isStart': {
-          if (change.currentValue) {
+    for (const propName in changes) {
+      if (propName === 'state') {
+        const currentValue = changes[propName].currentValue;
+        switch (true) {
+          case currentValue.isStart: {
             this.onStart();
+            break;
           }
-          break;
-        }
-        case 'isStop': {
-          if (change.currentValue) {
+          case currentValue.isStop: {
             this.onStop();
+            break;
           }
-          break;
-        }
-        case 'isPause': {
-          if (change.currentValue) {
+          case currentValue.isPause: {
             this.onPause();
+            break;
           }
-          break;
-        }
-        case 'isPlay': {
-          if (change.currentValue) {
+          case currentValue.isPlay: {
             this.onPlay();
+            break;
           }
-          break;
         }
       }
     }

@@ -1,7 +1,4 @@
 <div class="ball-container m-auto position-relative">
-  <app-ball [isStart]="isStart" [isStop]="isStop" [isPause]="isPause" [isPlay]="isPlay"></app-ball>
+  <app-ball [state]="state"></app-ball>
 </div>
-<app-actions (ballStarted)="onBallStarted($event)"
-             (ballStopped)="onBallStopped($event)"
-             (ballPaused)="onBallPaused($event)"
-             (ballPlayed)="onBallPlayed($event)"></app-actions>
+<app-actions (actionOutput)="this.onAction($event)"></app-actions>

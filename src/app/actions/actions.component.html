@@ -1,6 +1,8 @@
 <div class="mt-3">
-  <button class="btn btn-info mr-1" [disabled]="!start" (click)="onStart()">Start</button>
-  <button class="btn btn-info mr-1" [disabled]="!stop" (click)="onStop()">Stop</button>
-  <button class="btn btn-info mr-1" [disabled]="!pause" (click)="onPause()">Pause</button>
-  <button class="btn btn-info mr-1" [disabled]="!play" (click)="onPlay()">Play</button>
+  <button class="btn btn-info mr-1"
+          *ngFor="let key of actionNames"
+          [disabled]="!actions[key].disabled"
+          (click)="actions[key].click()">
+    {{actions[key].text}}
+  </button>
 </div>

@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
+interface State {
+  isStart: boolean;
+  isStop: boolean;
+  isPause: boolean;
+  isPlay: boolean;
+}
+
 @Component({
   selector: 'app-ball-container',
   templateUrl: './ball-container.component.html',
@@ -7,10 +14,13 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class BallContainerComponent implements OnInit {
-  public isStart: boolean = false;
-  public isStop: boolean = false;
-  public isPause: boolean = false;
-  public isPlay: boolean = false;
+
+  public state: State = {
+    isStart: false,
+    isStop: false,
+    isPause: false,
+    isPlay: false
+  }
 
   constructor() {
   }
@@ -18,16 +28,27 @@ export class BallContainerComponent implements OnInit {
   ngOnInit() {
   }
 
-  onBallStarted(ballStart: boolean) {
-    this.isStart = ballStart;
-  }
-  onBallStopped(ballStop: boolean) {
-    this.isStop = ballStop;
-  }
-  onBallPaused(ballPause: boolean) {
-    this.isPause = ballPause;
-  }
-  onBallPlayed(ballPlay: boolean) {
-    this.isPlay = ballPlay;
+  onAction(ballAction: string) {
+    this.state.isStart = false;
+    this.state.isStop = false;
+    this.state.isPause = false;
+    this.state.isPlay = false;
+
+    switch (ballAction) {
+      case 'start':
+        this.state.isStart = true;
+        break;
+      case 'stop':
+        this.state.isStop = true;
+        break;
+      case 'pause':
+        this.state.isPause = true;
+        break;
+      case 'play':
+        this.state.isPlay = true;
+        break;
+    }
+    /*How handle object's changes*/
+    this.state = {...this.state};
   }
 }

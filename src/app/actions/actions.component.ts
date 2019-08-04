@@ -1,5 +1,18 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 
+interface Action {
+  text: string;
+  click: () => void;
+  disabled: boolean;
+}
+
+interface Actions {
+  start: Action;
+  stop: Action;
+  pause: Action;
+  play: Action;
+}
+
 @Component({
   selector: 'app-actions',
   templateUrl: './actions.component.html',
@@ -7,15 +20,31 @@ import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 })
 
 export class ActionsComponent implements OnInit {
-  @Output() ballStarted: EventEmitter<boolean> = new EventEmitter();
-  @Output() ballStopped: EventEmitter<boolean> = new EventEmitter();
-  @Output() ballPaused: EventEmitter<boolean> = new EventEmitter();
-  @Output() ballPlayed: EventEmitter<boolean> = new EventEmitter();
+  @Output() actionOutput: EventEmitter<string> = new EventEmitter();
 
-  public start: boolean = true;
-  public stop: boolean = false;
-  public play: boolean = false;
-  public pause: boolean = false;
+  public actions: Actions  = {
+    start: {
+      text: 'Start',
+      click: () => this.ballMoveAction('start'),
+      disabled: true
+    },
+    stop: {
+      text: 'Stop',
+      click: () => this.ballMoveAction('stop'),
+      disabled: false
+    },
+    pause: {
+      text: 'Pause',
+      click: () => this.ballMoveAction('pause'),
+      disabled: false
+    },
+    play: {
+      text: 'Play',
+      click: () => this.ballMoveAction('play'),
+      disabled: false
+    }
+  };
+  public actionNames: Array<string> = Object.keys(this.actions);
 
   constructor() {
   }
@@ -23,43 +52,30 @@ export class ActionsComponent implements OnInit {
   ngOnInit() {
   }
 
-  onStart() {
-    this.start = false;
-    this.stop = true;
-    this.pause = true;
-    this.ballStarted.emit(!this.start);
-    this.ballStopped.emit(!this.stop);
-    this.ballPaused.emit(!this.pause);
-  }
+  ballMoveAction(ballAction: string) {
+    this.actions.start.disabled = false;
+    this.actions.stop.disabled = false;
+    this.actions.pause.disabled = false;
+    this.actions.play.disabled = false;
 
-  onStop() {
-    this.start = true;
-    this.stop = false;
-    this.pause = false;
-    this.ballStarted.emit(!this.start);
-    this.ballStopped.emit(!this.stop);
-    this.ballPaused.emit(this.pause);
-  }
-
-  onPause() {
-    this.start = false;
-    this.stop = false;
-    this.pause = false;
-    this.play = true;
-    this.ballStarted.emit(!this.start);
-    this.ballStopped.emit(this.stop);
-    this.ballPaused.emit(!this.pause);
-    this.ballPlayed.emit(!this.play);
-  }
-
-  onPlay() {
-    this.start = false;
-    this.stop = true;
-    this.pause = true;
-    this.play = false;
-    this.ballStarted.emit(!this.start);
-    this.ballStopped.emit(!this.stop);
-    this.ballPaused.emit(!this.pause);
-    this.ballPlayed.emit(!this.play);
+    switch (ballAction) {
+      case 'start':
+        this.actions.stop.disabled = true;
+        this.actions.pause.disabled = true;
+        this.actionOutput.emit('start');
+        break;
+      case 'stop':
+        this.actions.start.disabled = true;
+        this.actionOutput.emit('stop');
+        break;
+      case 'pause':
+        this.actions.play.disabled = true;
+        this.actionOutput.emit('pause');
+        break;
+      case 'play':
+        this.actions.stop.disabled = true;
+        this.actions.pause.disabled = true;
+        this.actionOutput.emit('play');
+    }
   }
 }
