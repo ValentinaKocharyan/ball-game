@@ -1,26 +1,13 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { style, animate, AnimationBuilder } from '@angular/animations';
-
-interface State {
-  isStart: boolean;
-  isStop: boolean;
-  isPause: boolean;
-  isPlay: boolean;
-}
+import { BallService } from '../app.service';
 
 @Component({
   selector: 'app-ball',
   templateUrl: './ball.component.html',
   styleUrls: ['./ball.component.css']
 })
-export class BallComponent implements OnInit, OnChanges {
-
-  @Input() state: State = {
-    isStart: false,
-    isStop: false,
-    isPause: false,
-    isPlay: false
-  };
+export class BallComponent implements OnInit {
 
   @ViewChild('el', {static: true}) el: ElementRef;
 
@@ -28,7 +15,7 @@ export class BallComponent implements OnInit, OnChanges {
   private ball: any;
   private player: any;
 
-  constructor(private builder: AnimationBuilder) { }
+  constructor(private builder: AnimationBuilder, public ballAction: BallService) {}
 
   ngOnInit() {
     this.ballWidth = this.el.nativeElement.offsetWidth;
@@ -41,32 +28,24 @@ export class BallComponent implements OnInit, OnChanges {
       animate(2000, style({top: '0px'})),
     ]);
     this.player = this.ball.create(this.el.nativeElement, {});
-  }
 
-  ngOnChanges(changes: SimpleChanges) {
-    for (const propName in changes) {
-      if (propName === 'state') {
-        const currentValue = changes[propName].currentValue;
-        switch (true) {
-          case currentValue.isStart: {
-            this.onStart();
-            break;
-          }
-          case currentValue.isStop: {
-            this.onStop();
-            break;
-          }
-          case currentValue.isPause: {
-            this.onPause();
-            break;
-          }
-          case currentValue.isPlay: {
-            this.onPlay();
-            break;
-          }
-        }
+    this.ballAction.currentAction.subscribe(action => {
+      switch (action) {
+        case 'start':
+          this.onStart();
+          break;
+        case 'stop':
+          this.onStop();
+          break;
+        case 'play':
+          this.onPlay();
+          break;
+        case 'pause':
+          this.onPause();
+          break;
       }
-    }
+    });
+
   }
 
   private animate() {

@@ -1,16 +1,24 @@
-import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import { BallService } from '../app.service';
 
-interface Action {
+interface State {
   text: string;
   click: () => void;
   disabled: boolean;
 }
 
 interface Actions {
-  start: Action;
-  stop: Action;
-  pause: Action;
-  play: Action;
+  start: State;
+  stop: State;
+  pause: State;
+  play: State;
+}
+
+enum Action {
+  Start,
+  Stop,
+  Pause,
+  Play
 }
 
 @Component({
@@ -20,7 +28,6 @@ interface Actions {
 })
 
 export class ActionsComponent implements OnInit {
-  @Output() actionOutput: EventEmitter<string> = new EventEmitter();
 
   public actions: Actions  = {
     start: {
@@ -46,12 +53,10 @@ export class ActionsComponent implements OnInit {
   };
   public actionNames: Array<string> = Object.keys(this.actions);
 
-  constructor() {
-  }
+  constructor(private ballAction: BallService) {}
 
   ngOnInit() {
   }
-
   ballMoveAction(ballAction: string) {
     this.actions.start.disabled = false;
     this.actions.stop.disabled = false;
@@ -62,20 +67,20 @@ export class ActionsComponent implements OnInit {
       case 'start':
         this.actions.stop.disabled = true;
         this.actions.pause.disabled = true;
-        this.actionOutput.emit('start');
+        this.ballAction.changeAction(Action.Start);
         break;
       case 'stop':
         this.actions.start.disabled = true;
-        this.actionOutput.emit('stop');
+        this.ballAction.changeAction(Action.Stop);
         break;
       case 'pause':
         this.actions.play.disabled = true;
-        this.actionOutput.emit('pause');
+        this.ballAction.changeAction(Action.Pause);
         break;
       case 'play':
         this.actions.stop.disabled = true;
         this.actions.pause.disabled = true;
-        this.actionOutput.emit('play');
+        this.ballAction.changeAction(Action.Play);
     }
   }
 }
