@@ -2,6 +2,15 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { style, animate, AnimationBuilder } from '@angular/animations';
 import { BallService } from '../app.service';
 
+enum Action {
+  Start = 'start',
+  Stop = 'stop',
+  Pause = 'pause',
+  Play = 'play',
+  Increase = 'increase',
+  Decrease = 'decrease'
+}
+
 @Component({
   selector: 'app-ball',
   templateUrl: './ball.component.html',
@@ -32,22 +41,22 @@ export class BallComponent implements OnInit {
 
     this.ballAction.currentAction.subscribe(action => {
       switch (action) {
-        case 'start':
+        case Action.Start:
           this.onStart();
           break;
-        case 'stop':
+        case Action.Stop:
           this.onStop();
           break;
-        case 'play':
+        case Action.Play:
           this.onPlay();
           break;
-        case 'pause':
+        case Action.Pause:
           this.onPause();
           break;
-        case 'increase':
+        case Action.Increase:
           this.onIncrease();
           break;
-        case 'decrease ':
+        case Action.Decrease:
           this.onDecrease();
           break;
       }

@@ -17,12 +17,12 @@ interface Actions {
 }
 
 enum Action {
-  Start,
-  Stop,
-  Pause,
-  Play,
-  Increase,
-  Decrease
+  Start = 'start',
+  Stop = 'stop',
+  Pause = 'pause',
+  Play = 'play',
+  Increase = 'increase',
+  Decrease = 'decrease'
 }
 
 @Component({

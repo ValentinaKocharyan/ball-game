@@ -2,43 +2,22 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 enum Action {
-  Start,
-  Stop,
-  Pause,
-  Play,
-  Increase,
-  Decrease
+  Start = 'start',
+  Stop = 'stop',
+  Pause = 'pause',
+  Play = 'play',
+  Increase = 'increase',
+  Decrease = 'decrease'
 }
 
 @Injectable()
 export class BallService {
 
-  private state: string = 'stop';
-  private actionSource = new BehaviorSubject(this.state);
+  private actionSource = new BehaviorSubject('stop');
   currentAction = this.actionSource.asObservable();
   constructor() { }
 
   changeAction(actionState) {
-    switch (actionState) {
-      case Action.Start:
-        this.state = 'start';
-        break;
-      case Action.Stop:
-        this.state = 'stop';
-        break;
-      case Action.Play:
-        this.state = 'play';
-        break;
-      case Action.Pause:
-        this.state = 'pause';
-        break;
-      case Action.Increase:
-        this.state = 'increase';
-        break;
-      case Action.Decrease:
-        this.state = 'decrease ';
-        break;
-    }
-    this.actionSource.next(this.state);
+    this.actionSource.next(actionState);
   }
 }
