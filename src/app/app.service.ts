@@ -5,7 +5,9 @@ enum Action {
   Start,
   Stop,
   Pause,
-  Play
+  Play,
+  Increase,
+  Decrease
 }
 
 @Injectable()
@@ -29,6 +31,12 @@ export class BallService {
         break;
       case Action.Pause:
         this.state = 'pause';
+        break;
+      case Action.Increase:
+        this.state = 'increase';
+        break;
+      case Action.Decrease:
+        this.state = 'decrease ';
         break;
     }
     this.actionSource.next(this.state);

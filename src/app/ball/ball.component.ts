@@ -14,6 +14,7 @@ export class BallComponent implements OnInit {
   private ballWidth: number;
   private ball: any;
   private player: any;
+  private speed: number = 2000;
 
   constructor(private builder: AnimationBuilder, public ballAction: BallService) {}
 
@@ -22,10 +23,10 @@ export class BallComponent implements OnInit {
     this.ball = this.builder.build([
       style({right: '0px'}),
       style({top: '0px'}),
-      animate(2000, style({right: 'calc(100% - ' + this.ballWidth + 'px)'})),
-      animate(2000, style({top: 'calc(100% - ' + this.ballWidth + 'px)'})),
-      animate(2000, style({right: '0px'})),
-      animate(2000, style({top: '0px'})),
+      animate(this.speed, style({right: 'calc(100% - ' + this.ballWidth + 'px)'})),
+      animate(this.speed, style({top: 'calc(100% - ' + this.ballWidth + 'px)'})),
+      animate(this.speed, style({right: '0px'})),
+      animate(this.speed, style({top: '0px'})),
     ]);
     this.player = this.ball.create(this.el.nativeElement, {});
 
@@ -42,6 +43,12 @@ export class BallComponent implements OnInit {
           break;
         case 'pause':
           this.onPause();
+          break;
+        case 'increase':
+          this.onIncrease();
+          break;
+        case 'decrease ':
+          this.onDecrease();
           break;
       }
     });
@@ -69,5 +76,11 @@ export class BallComponent implements OnInit {
   }
   onPlay() {
     this.player.play();
+  }
+  onIncrease() {
+    this.speed = 3000;
+  }
+  onDecrease() {
+    this.speed = 100;
   }
 }
