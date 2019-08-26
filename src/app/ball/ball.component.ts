@@ -1,15 +1,8 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { style, animate, AnimationBuilder } from '@angular/animations';
 import { BallService } from '../app.service';
-
-enum Action {
-  Start = 'start',
-  Stop = 'stop',
-  Pause = 'pause',
-  Play = 'play',
-  Increase = 'increase',
-  Decrease = 'decrease'
-}
+import { Action } from './../@core/enums';
+import { MoveAction } from './../@core/interfaces';
 
 @Component({
   selector: 'app-ball',
@@ -24,6 +17,26 @@ export class BallComponent implements OnInit {
   private ball: any;
   private player: any;
   private speed: number = 2000;
+  private moveAction: MoveAction = {
+    start: (element: any) => {
+      element.animate();
+    },
+    stop: (element: any) => {
+      element.player.reset();
+    },
+    pause: (element: any) => {
+      element.player.pause();
+    },
+    play: (element: any) => {
+      element.player.play();
+    },
+    increase: (element: any) => {
+      element.speed = 3000;
+    },
+    decrease: (element: any) => {
+      element.speed = 100;
+    }
+  };
 
   constructor(private builder: AnimationBuilder, public ballAction: BallService) {}
 
@@ -42,22 +55,22 @@ export class BallComponent implements OnInit {
     this.ballAction.currentAction.subscribe(action => {
       switch (action) {
         case Action.Start:
-          this.onStart();
+          this.moveAction.start(this);
           break;
         case Action.Stop:
-          this.onStop();
+          this.moveAction.stop(this);
           break;
         case Action.Play:
-          this.onPlay();
+          this.moveAction.play(this);
           break;
         case Action.Pause:
-          this.onPause();
+          this.moveAction.pause(this);
           break;
         case Action.Increase:
-          this.onIncrease();
+          this.moveAction.increase(this);
           break;
         case Action.Decrease:
-          this.onDecrease();
+          this.moveAction.decrease(this);
           break;
       }
     });
@@ -72,24 +85,5 @@ export class BallComponent implements OnInit {
     });
 
     this.player.play();
-  }
-
-  onStart() {
-    this.animate();
-  }
-  onStop() {
-    this.player.reset();
-  }
-  onPause() {
-    this.player.pause();
-  }
-  onPlay() {
-    this.player.play();
-  }
-  onIncrease() {
-    this.speed = 3000;
-  }
-  onDecrease() {
-    this.speed = 100;
   }
 }

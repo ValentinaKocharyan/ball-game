@@ -1,29 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import { BallService } from '../app.service';
-
-interface State {
-  text: string;
-  click: () => void;
-  disabled: boolean;
-}
-
-interface Actions {
-  start: State;
-  stop: State;
-  pause: State;
-  play: State;
-  increase: State;
-  decrease: State;
-}
-
-enum Action {
-  Start = 'start',
-  Stop = 'stop',
-  Pause = 'pause',
-  Play = 'play',
-  Increase = 'increase',
-  Decrease = 'decrease'
-}
+import { Action } from './../@core/enums';
+import { Actions } from '../@core/interfaces';
 
 @Component({
   selector: 'app-actions',
@@ -71,49 +49,39 @@ export class ActionsComponent implements OnInit {
 
   ngOnInit() {
   }
+  changeDisabledProperty(actions: Actions, disabledItems: Array<string>) {
+    const actionsArr = Object.keys(actions);
+    for( let i = 0; i < actionsArr.length; i++ ) {
+      const currentAction = actionsArr[i];
+      actions[currentAction].disabled = !!disabledItems.includes(currentAction);
+    }
+  }
   ballMoveAction(ballAction: string) {
-    this.actions.start.disabled = false;
-    this.actions.stop.disabled = false;
-    this.actions.pause.disabled = false;
-    this.actions.play.disabled = false;
-    this.actions.increase.disabled = false;
-    this.actions.decrease.disabled = false;
+    this.changeDisabledProperty(this.actions, []);
 
     switch (ballAction) {
       case 'start':
-        this.actions.stop.disabled = true;
-        this.actions.pause.disabled = true;
-        this.actions.increase.disabled = true;
-        this.actions.decrease.disabled = true;
+        this.changeDisabledProperty(this.actions, ['stop', 'pause', 'increase', 'decrease']);
         this.ballAction.changeAction(Action.Start);
         break;
       case 'stop':
-        this.actions.start.disabled = true;
+        this.changeDisabledProperty(this.actions, ['start']);
         this.ballAction.changeAction(Action.Stop);
         break;
       case 'pause':
-        this.actions.play.disabled = true;
+        this.changeDisabledProperty(this.actions, ['play']);
         this.ballAction.changeAction(Action.Pause);
         break;
       case 'play':
-        this.actions.stop.disabled = true;
-        this.actions.pause.disabled = true;
-        this.actions.increase.disabled = true;
-        this.actions.decrease.disabled = true;
+        this.changeDisabledProperty(this.actions, ['stop', 'pause', 'increase', 'decrease']);
         this.ballAction.changeAction(Action.Play);
         break;
       case 'increase':
-        this.actions.stop.disabled = true;
-        this.actions.pause.disabled = true;
-        this.actions.increase.disabled = true;
-        this.actions.decrease.disabled = true;
+        this.changeDisabledProperty(this.actions, ['stop', 'pause', 'increase', 'decrease']);
         this.ballAction.changeAction(Action.Increase);
         break;
       case 'decrease':
-        this.actions.stop.disabled = true;
-        this.actions.pause.disabled = true;
-        this.actions.increase.disabled = true;
-        this.actions.decrease.disabled = true;
+        this.changeDisabledProperty(this.actions, ['stop', 'pause', 'increase', 'decrease']);
         this.ballAction.changeAction(Action.Decrease);
         break;
     }
