@@ -18,20 +18,20 @@ export class BallComponent implements OnInit {
   private player: any;
   private speed: number = 2000;
   private moveAction: MoveAction = {
-    start: (element: any) => {
-      element.animate();
+    start: () => {
+      this.animate();
     },
-    stop: (element: any) => {
-      element.player.reset();
+    stop: () => {
+      this.player.reset();
     },
-    pause: (element: any) => {
-      element.player.pause();
+    pause: () => {
+      this.player.pause();
     },
-    play: (element: any) => {
-      element.player.play();
+    play: () => {
+      this.player.play();
     },
-    increase: (element: any) => {
-      element.speed = 3000;
+    increase: () => {
+      this.speed = 3000;
     },
     decrease: (element: any) => {
       element.speed = 100;
@@ -55,22 +55,22 @@ export class BallComponent implements OnInit {
     this.ballAction.currentAction.subscribe(action => {
       switch (action) {
         case Action.Start:
-          this.moveAction.start(this);
+          this.moveAction.start.call(this);
           break;
         case Action.Stop:
-          this.moveAction.stop(this);
+          this.moveAction.stop.call(this);
           break;
         case Action.Play:
-          this.moveAction.play(this);
+          this.moveAction.play.call(this);
           break;
         case Action.Pause:
-          this.moveAction.pause(this);
+          this.moveAction.pause.call(this);
           break;
         case Action.Increase:
-          this.moveAction.increase(this);
+          this.moveAction.increase.call(this);
           break;
         case Action.Decrease:
-          this.moveAction.decrease(this);
+          this.moveAction.decrease.call(this);
           break;
       }
     });
