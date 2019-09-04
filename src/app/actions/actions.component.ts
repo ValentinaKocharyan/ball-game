@@ -51,7 +51,7 @@ export class ActionsComponent implements OnInit {
   ngOnInit() {
   }
   changeDisabledProperty(actions: Actions, disabledItems: Array<string>) {
-    const actionsArr = Object.keys(actions);
+    const actionsArr: Array<string> = Object.keys(actions);
     _.each(actionsArr, (currentAction) => {
       actions[currentAction].disabled = !!disabledItems.includes(currentAction);
     });
@@ -60,27 +60,27 @@ export class ActionsComponent implements OnInit {
     this.changeDisabledProperty(this.actions, []);
 
     switch (ballAction) {
-      case 'start':
+      case Action.Start:
         this.changeDisabledProperty(this.actions, [Action.Stop, Action.Pause, Action.Increase, Action.Decrease]);
         this.ballAction.changeAction(Action.Start);
         break;
-      case 'stop':
+      case Action.Stop:
         this.changeDisabledProperty(this.actions, [Action.Start]);
         this.ballAction.changeAction(Action.Stop);
         break;
-      case 'pause':
+      case Action.Pause:
         this.changeDisabledProperty(this.actions, [Action.Play]);
         this.ballAction.changeAction(Action.Pause);
         break;
-      case 'play':
+      case Action.Play:
         this.changeDisabledProperty(this.actions, [Action.Stop, Action.Pause, Action.Increase, Action.Decrease]);
         this.ballAction.changeAction(Action.Play);
         break;
-      case 'increase':
+      case Action.Increase:
         this.changeDisabledProperty(this.actions, [Action.Stop, Action.Pause, Action.Increase, Action.Decrease]);
         this.ballAction.changeAction(Action.Increase);
         break;
-      case 'decrease':
+      case Action.Decrease:
         this.changeDisabledProperty(this.actions, [Action.Stop, Action.Start, Action.Increase, Action.Decrease]);
         this.ballAction.changeAction(Action.Decrease);
         break;
